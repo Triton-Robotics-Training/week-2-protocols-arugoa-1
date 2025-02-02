@@ -6,6 +6,7 @@ const int BUFFER_SIZE = 26;
 const int offset = 1;
 #include <iostream>
 
+
 static char inputString[] = "ydrsxdladccdclzqhmzqzrztbd"; //this test string should output zestyembeddedmarinarasauce
 
 //puts a character into the output buffer
@@ -29,6 +30,14 @@ char numberToLetter(char i){
 int main(void)
 {
     //CODE GOES HERE 
-
+    int buffer = 0;
+    for (char c : inputString) {
+        buffer += 1;
+        putc(c + offset);
+        if (buffer == 26) {
+            putc('\n');
+            buffer = 0;
+        }
+    }
     putc('\n');
 }
