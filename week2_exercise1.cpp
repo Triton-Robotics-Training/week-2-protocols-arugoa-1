@@ -33,8 +33,14 @@ int main(void)
     int buffer = 0;
     for (char c : inputString) {
         buffer += 1;
-        putc(c + offset);
-        if (buffer == 26) {
+        if (c == 'z') {
+            putc('a');
+        }
+        else {
+            putc(c + offset);
+        }
+
+        if (buffer == BUFFER_SIZE) {
             putc('\n');
             buffer = 0;
         }
