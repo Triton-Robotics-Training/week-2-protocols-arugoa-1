@@ -45,6 +45,23 @@ void putc_bin(char c){
 int main(void)
 {
     //CODE GOES HERE 
+    int buffer = 0;
+    for (char c : inputString) {
+        buffer += 1;
+        //if (c == 'z') {
+            //putc('a');
+        //}
+        //else {
+            //putc(c + offset);
+        //}
 
+        putc(c);
+        //putc_bin(c);
+        
+        if (buffer == BUFFER_SIZE) {
+            putc('\n');
+            buffer = 0;
+        }
+    }
     putc('\n');
 }
