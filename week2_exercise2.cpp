@@ -5,6 +5,7 @@
 const int BUFFER_SIZE = 98;
 const int offset = 1;
 #include <iostream>
+#include <cstdint>
 
 static unsigned char inputString[] = 
 {0x84,0x1d,0x3d,0x74,0x1e,0x3d,0x74,0x1e,
@@ -48,15 +49,25 @@ int main(void)
     int buffer = 0;
     for (char c : inputString) {
         buffer += 1;
-        //if (c == 'z') {
-            //putc('a');
-        //}
-        //else {
-            //putc(c + offset);
-        //}
+        // inverts, takes 21 and moves to 76 slot
+        uint8_t c1 = ((~c) & 0x06) << 5;
+        // takes 4 and moves to 5
+        uint8_t c2 = (c & 0x10) << 1;
+        // inverts, takes 3, and moves to 4
+        uint8_t c3 = ((~c) & 0x08) << 1;
+        // takes 0 to 3
+        uint8_t c4 = ((c) & 0x01) << 3;
+        // takes 765 to 210
+        uint8_t c5 = ((c) & 0xE0) >> 5;
 
-        putc(c);
-        //putc_bin(c);
+        // combining them all
+
+        uint8_t fin = c1 + c2 + c3 + c4 + c5;
+
+        char solved = fin;
+
+
+        putc(solved);
         
         if (buffer == BUFFER_SIZE) {
             putc('\n');
