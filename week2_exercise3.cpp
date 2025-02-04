@@ -52,13 +52,13 @@ public:
 //TOUCH NOTHING ABOVE THIS
 
 int main() {
-    srand(2); //MODIFY THIS TO CHANGE THE READ PACKET TEST CASE
+    srand(4); //MODIFY THIS TO CHANGE THE READ PACKET TEST CASE
     CAN canbus; //usually this has parameters, but since this isn't real and we're running this on a standard compiler, it doesn't
     
-    int16_t angle = 0;
-    int16_t velocity = 0;
-    int16_t torque = 0;
-    int8_t temperature = 0; 
+    int16_t angle = 1300;
+    int16_t velocity = 2140;
+    int16_t torque = 382;
+    int8_t temperature = 10; 
     //test cases: angle, velocity, torque, temperature
     //test case 1: 1300, 2140, 382, 10
     //test case 2: 8000, -5000, -800, 90
@@ -69,6 +69,25 @@ int main() {
     uint8_t data_send[8] = {0,0,0,0,0,0,0,0};
     short len_send = 8;
     short id_send = 0x1FF;
+
+    // encoding angle, vel, torque in that order
+    uint16_t ang = angle;
+    uint8_t firstang = ang >> 8;
+    data_send[0] = firstang;
+    data_send[1] = (ang << 8) >> 8; // hopefully this works?
+
+    uint16_t vel = velocity;
+    uint8_t firstvel = vel >> 8;
+    data_send[2] = firstvel;
+    data_send[3] = (vel << 8) >> 8; // hopefully this works?
+
+    uint16_t tor = torque;
+    uint8_t firsttor = tor >> 8;
+    data_send[4] = firsttor;
+    data_send[5] = (tor << 8) >> 8; // hopefully this works?
+
+    // encoding temp (easiest LOL)
+    data_send[6] = temperature;
     
     uint8_t data_recv[8] = {0,0,0,0,0,0,0,0};
     short len_recv;
@@ -85,4 +104,6 @@ int main() {
     // srand(0): 1383, -5114, 27, 85
     // srand(2): 6138, 6719, 38, 65
     // srand(4): 7645, 4083, 124, 86
+    printf("You recieved angle: %d | velocity: %d | torque: %d | temperature: %d\n", data_recv[0] << 8 | data_recv[1], (int16_t)(data_recv[2] << 8 | data_recv[3]), (int16_t)(data_recv[4] << 8 | data_recv[5]), data_recv[6]);
+
 }
